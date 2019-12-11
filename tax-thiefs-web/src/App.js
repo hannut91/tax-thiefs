@@ -1,10 +1,16 @@
 import React from 'react';
+import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps';
 
 import './App.css';
 
-import { RenderAfterNavermapsLoaded, NaverMap } from 'react-naver-maps';
+function App(props) {
+  const navermaps = window.naver.maps;
 
-function App() {
+  const markers = [
+    [37.360747, 127.105193], // 더 샵 스타파크
+    [37.3595704, 127.105399], // 그린팩토리
+    [37.372616, 127.107392], // 정자동 파크뷰
+  ]
   return (
     <div className="App">
       <RenderAfterNavermapsLoaded
@@ -20,7 +26,18 @@ function App() {
           }}
           defaultCenter={{ lat: 37.3595704, lng: 127.105399 }}
           defaultZoom={10}
-        />
+        >
+          {
+            markers.map(coordinates => (
+              <Marker
+                position={new navermaps.LatLng(coordinates[0], coordinates[1])}
+                onClick={() => {
+                  alert('여기는 네이버 입니다.')
+                }}
+              />
+            ))
+          }
+        </NaverMap>
       </RenderAfterNavermapsLoaded>
     </div>
   );
