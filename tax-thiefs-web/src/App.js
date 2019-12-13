@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 
 import "./App.css";
-import { getCurrentLocation, DEFAULT_LOCATION }
-  from './services/location.service'
+import {
+  getCurrentLocation,
+  DEFAULT_LOCATION
+} from "./services/location.service";
 
 function App() {
   const coordinates = DEFAULT_LOCATION;
   const [ref, setRef] = useState();
+  const [currentMarker, setCurrentMarker] = useState();
 
   useEffect(() => {
     if (!ref) {
@@ -18,6 +21,7 @@ function App() {
       try {
         const { lat, lng } = await getCurrentLocation();
         ref.panTo(new ref.props.navermaps.LatLng(lat, lng));
+        setCurrentMarker({ lat, lng });
       } catch (err) {
         alert("에러가 발상했습니다. ", err);
       }
@@ -47,15 +51,37 @@ function App() {
           defaultCenter={{ lat: coordinates.lat, lng: coordinates.lng }}
           defaultZoom={10}
         >
-          {ref && markers.map((coordinates, index) => (
+          {currentMarker && (
             <Marker
-              position={new ref.props.navermaps.LatLng(coordinates[0], coordinates[1])}
-              key={index}
+              icon={{
+                url: "current-location.png",
+                size: new ref.props.navermaps.Size(50, 52),
+                origin: new ref.props.navermaps.Point(0, 0),
+                anchor: new ref.props.navermaps.Point(25, 26)
+              }}
+              position={
+                new ref.props.navermaps.LatLng(
+                  currentMarker.lat,
+                  currentMarker.lng
+                )
+              }
               onClick={() => {
-                alert("여기는 네이버 입니다.");
+                alert("여기는 내 위치 입니다.");
               }}
             />
-          ))}
+          )}
+          {ref &&
+            markers.map((coordinates, index) => (
+              <Marker
+                position={
+                  new ref.props.navermaps.LatLng(coordinates[0], coordinates[1])
+                }
+                key={index}
+                onClick={() => {
+                  alert("여기는 네이버 입니다.");
+                }}
+              />
+            ))}
         </NaverMap>
       </RenderAfterNavermapsLoaded>
     </div>
