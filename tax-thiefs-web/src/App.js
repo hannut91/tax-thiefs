@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 
 import "./App.css";
-import { getCurrentLocation } from './services/location.service'
+import { getCurrentLocation, DEFAULT_LOCATION }
+  from './services/location.service'
 
 function App() {
-  const coordinates = {
-    lat: 37.3595704,
-    lng: 127.105399
-  }
+  const coordinates = DEFAULT_LOCATION;
   const [ref, setRef] = useState();
 
   useEffect(() => {
@@ -18,8 +16,8 @@ function App() {
 
     (async () => {
       try {
-        const coordinates = await getCurrentLocation();
-        ref.panTo(new ref.props.navermaps.LatLng(coordinates.lat, coordinates.lng));
+        const { lat, lng } = await getCurrentLocation();
+        ref.panTo(new ref.props.navermaps.LatLng(lat, lng));
       } catch (err) {
         alert("에러가 발상했습니다. ", err);
       }
