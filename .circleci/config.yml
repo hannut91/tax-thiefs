@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12.14
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - tax-thiefs-web-{{ checksum "tax-thiefs-web/package.json" }}
+
+      - run: |
+          cd tax-thiefs-web
+          npm install
+
+      - save_cache:
+          paths:
+            - tax-thiefs-web/node_modules
+          key: tax-thiefs-web-{{ checksum "tax-thiefs-web/package.json" }}
+
+      - run: |
+          cd tax-thiefs-web
+          npm run build
