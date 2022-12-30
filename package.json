@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/hannut91/tax-thiefs#readme",
   "devDependencies": {
-    "codeceptjs": "^2.3.6",
+    "codeceptjs": "^3.0.0",
     "puppeteer": "^2.0.0"
   }
 }
